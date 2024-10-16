@@ -1,30 +1,24 @@
 import React, { useState } from 'react';
+import './App.css';
 import Card from './Card';
 import Result from './Result';
-import './App.css';
-
-const words = [
-  { spanish: 'anguila', english: 'eel' },
-  { spanish: 'caballito de mar', english: 'seahorse' },
-  { spanish: 'medusa', english: 'jellyfish' },
-  { spanish: 'foca', english: 'seal' },
-  { spanish: 'nutria', english: 'otter' },
-  { spanish: 'morsa', english: 'walrus' },
-  { spanish: 'león marino', english: 'sea lion' },
-  { spanish: 'pingüino', english: 'penguin' },
-  { spanish: 'pulpo', english: 'octopus' },
-  { spanish: 'langosta', english: 'lobster' },
-  { spanish: 'cangrejo', english: 'crab' },
-  { spanish: 'gaviota', english: 'seagull' },
-  { spanish: 'pelícano', english: 'pelican' },
-  { spanish: 'camarón', english: 'shrimp' },
-  { spanish: 'mantarraya', english: 'manta ray' },
-  { spanish: 'almeja', english: 'clam' },
-];
 
 function App() {
+  const [words, setWords] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [showResult, setShowResult] = useState(false);
+  const [quizStarted, setQuizStarted] = useState(false);
+
+  const fetchWords = async () => {
+    const response = await fetch('http://localhost:4000/graphql', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ query: '{ words { spanish english } }' }),
+    });
+    const result = await response.json();
+    setWords(result.data.words);
+    setQuizStarted(true);
+  };
 
   const handleNext = () => {
     if (currentIndex < words.length - 1) {
@@ -37,11 +31,14 @@ function App() {
   const handleRestart = () => {
     setCurrentIndex(0);
     setShowResult(false);
+    setQuizStarted(false);
   };
 
   return (
     <div className="App">
-      {showResult ? (
+      {!quizStarted ? (
+        <button onClick={fetchWords}>Learn Sea Creatures</button>
+      ) : showResult ? (
         <Result onRestart={handleRestart} />
       ) : (
         <Card word={words[currentIndex]} words={words} onNext={handleNext} />
