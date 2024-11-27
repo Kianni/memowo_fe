@@ -10,7 +10,7 @@ function App() {
   const [quizStarted, setQuizStarted] = useState(false);
 
   const fetchWords = async () => {
-    const response = await fetch('http://localhost:4000/graphql', {
+    const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ query: '{ words { spanish english } }' }),
