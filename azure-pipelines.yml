@@ -1,0 +1,33 @@
+trigger:
+- main  # Run pipeline on push to 'main' branch
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+steps:
+- task: NodeTool@0
+  inputs:
+    versionSpec: '16.x'
+  displayName: 'Install Node.js'
+
+- script: |
+    npm install
+    npm run build
+  displayName: 'Install Dependencies and Build App'
+
+- task: ArchiveFiles@2
+  inputs:
+    rootFolderOrFile: '$(System.DefaultWorkingDirectory)/build'
+    includeRootFolder: false
+    archiveType: 'zip'
+    archiveFile: '$(Build.ArtifactStagingDirectory)/build.zip'
+  displayName: 'Archive Build Folder'
+
+- task: AzureWebApp@1
+  inputs:
+    azureSubscription: 'AzureForStudentsConnection'
+    appType: 'webAppLinux'  # Specify that this is a Linux-based Web App
+    appName: 'memowo-fe'
+    package: '$(Build.ArtifactStagingDirectory)/build.zip'
+    startupCommand: 'npx serve -s .'
+  displayName: 'Deploy React App to Azure'
