@@ -14,7 +14,7 @@ steps:
   displayName: 'Install Node.js'
 
 - script: |
-    cp .env.production .env
+    echo "REACT_APP_BACKEND_URL=https://memowo-be-cddfeyawhfegd2b9.canadaeast-01.azurewebsites.net/graphql" > .env
     npm install
     npm run build
   displayName: 'Install Dependencies and Build App'
