@@ -14,6 +14,7 @@ steps:
   displayName: 'Install Node.js'
 
 - script: |
+    cp .env.production .env
     npm install
     npm run build
   displayName: 'Install Dependencies and Build App'
