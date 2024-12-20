@@ -16,8 +16,15 @@ steps:
 - script: |
     echo "REACT_APP_BACKEND_URL=https://memowo-be-cddfeyawhfegd2b9.canadaeast-01.azurewebsites.net/graphql" > .env
     npm install
+  displayName: 'Install Dependencies'
+  
+- script: |
+    npm test
+  displayName: 'Run Tests'
+
+- script: |
     npm run build
-  displayName: 'Install Dependencies and Build App'
+  displayName: 'Build App'
 
 - task: ArchiveFiles@2
   inputs:
