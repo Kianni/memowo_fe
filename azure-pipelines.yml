@@ -23,12 +23,12 @@ steps:
   displayName: 'Install Frontend Dependencies'
 
 - script: |
-    cd ../memowo-be
+    cd ./memowo-be
     npm install
   displayName: 'Install Backend Dependencies'
 
 - script: |
-    cd ../memowo-be
+    cd ./memowo-be
     npm start &
     npx wait-on http://localhost:4000
     echo "Backend server is up and running"
