@@ -27,18 +27,18 @@ steps:
   displayName: 'Install Cypress'
 
 - script: |
-    npm start &
-    npx wait-on http://localhost:3000
-    echo "Frontend server is up and running"
-    curl -I http://localhost:3000
-  displayName: 'Start Frontend Server'
-
-- script: |
     npm run start:backend &
     npx wait-on http://localhost:4000
     curl -I http://localhost:4000
     echo "Backend server is up and running"
   displayName: 'Verify Backend Server'
+
+- script: |
+    npm start &
+    npx wait-on http://localhost:3000
+    echo "Frontend server is up and running"
+    curl -I http://localhost:3000
+  displayName: 'Start Frontend Server'
 
 - script: |
     npx cypress run
