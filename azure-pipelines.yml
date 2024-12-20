@@ -27,6 +27,11 @@ steps:
   displayName: 'Install Cypress'
 
 - script: |
+    npm start &
+    npx wait-on http://localhost:3000
+  displayName: 'Start Frontend Server'
+
+- script: |
     npx cypress run
   displayName: 'Run Cypress Integration Tests'
 
