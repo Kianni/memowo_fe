@@ -29,6 +29,8 @@ steps:
 - script: |
     npm start &
     npx wait-on http://localhost:3000
+    echo "Frontend server is up and running"
+    curl -I http://localhost:3000
   displayName: 'Start Frontend Server'
 
 - script: |
