@@ -7,7 +7,11 @@ pool:
 steps:
 - checkout: self
   persistCredentials: true
-  
+
+- script: |
+    git clone https://github.com/Kianni/memowo-be.git
+  displayName: 'Clone Backend Repository'
+
 - task: NodeTool@0
   inputs:
     versionSpec: '16.x'
@@ -16,7 +20,27 @@ steps:
 - script: |
     echo "REACT_APP_BACKEND_URL=https://memowo-be-cddfeyawhfegd2b9.canadaeast-01.azurewebsites.net/graphql" > .env
     npm install
-  displayName: 'Install Dependencies'
+  displayName: 'Install Frontend Dependencies'
+
+- script: |
+    cd ../memowo-be
+    npm install
+  displayName: 'Install Backend Dependencies'
+
+- script: |
+    cd ../memowo-be
+    npm start &
+    npx wait-on http://localhost:4000
+    echo "Backend server is up and running"
+    curl -I http://localhost:4000
+  displayName: 'Start and Verify Backend Server'
+
+- script: |
+    npm start &
+    npx wait-on http://localhost:3000
+    echo "Frontend server is up and running"
+    curl -I http://localhost:3000
+  displayName: 'Start and Verify Frontend Server'
   
 - script: |
     CI=true npm test -- --watchAll=false
@@ -25,20 +49,6 @@ steps:
 - script: |
     npx cypress install
   displayName: 'Install Cypress'
-
-- script: |
-    npm run start:backend &
-    npx wait-on http://localhost:4000
-    curl -I http://localhost:4000
-    echo "Backend server is up and running"
-  displayName: 'Verify Backend Server'
-
-- script: |
-    npm start &
-    npx wait-on http://localhost:3000
-    echo "Frontend server is up and running"
-    curl -I http://localhost:3000
-  displayName: 'Start Frontend Server'
 
 - script: |
     npx cypress run
