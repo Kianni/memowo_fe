@@ -34,6 +34,13 @@ steps:
   displayName: 'Start Frontend Server'
 
 - script: |
+    npm start &
+    npx wait-on http://localhost:4000
+    curl -I http://localhost:4000
+    echo "Backend server is up and running"
+  displayName: 'Verify Backend Server'
+
+- script: |
     npx cypress run
   displayName: 'Run Cypress Integration Tests'
 
