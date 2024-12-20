@@ -23,6 +23,14 @@ steps:
   displayName: 'Run Tests'
 
 - script: |
+    npx cypress install
+  displayName: 'Install Cypress'
+
+- script: |
+    npx cypress run
+  displayName: 'Run Cypress Integration Tests'
+
+- script: |
     npm run build
   displayName: 'Build App'
 
