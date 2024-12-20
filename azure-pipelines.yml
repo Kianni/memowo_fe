@@ -19,7 +19,7 @@ steps:
   displayName: 'Install Dependencies'
   
 - script: |
-    npm test
+    CI=true npm test -- --watchAll=false
   displayName: 'Run Tests'
 
 - script: |
